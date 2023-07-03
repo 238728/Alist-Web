@@ -26,9 +26,17 @@ export default defineConfig({
   base: process.env.NODE_ENV === "production" ? "/__dynamic_base__/" : "/",
   // base: "/",
   build: {
-    // target: "es2015", //next
-    // polyfillDynamicImport: false,
-  },
+        chunkSizeWarningLimit: 1500,
+        rollupOptions: {
+            output: {
+                manualChunks(id) {
+                    if (id.includes('node_modules')) {
+                        return id.toString().split('node_modules/')[1].split('/')[0].toString();
+                    }
+                }
+            }
+        }
+    },
   // experimental: {
   //   renderBuiltUrl: (filename, { type, hostId, hostType }) => {
   //     if (type === "asset") {
